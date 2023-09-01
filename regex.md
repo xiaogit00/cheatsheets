@@ -1,6 +1,6 @@
 # Regex Basics
 
-# Character class matching:
+## Character class matching:
 `\d` - any digit from 0-9.  
 `\D` - any character that is *not* a digit from 0-9.  
 `\w` - any 'word', defined as letter, digit, or underscore.  
