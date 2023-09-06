@@ -9,26 +9,29 @@
 `\S` - any character that is *not* a space, tab, or newline.  
 
 ## Symbols matching:
-`?` - zero or one of preceding group 
-`*` - zero or more of preceding group
-`+` - one or more of preceding group
-`{n}` - exactly n of preceding group
-`{n,}` - n or more of preceding group
-`{,m}` - 0 to m of preceding group
-`{n,m}` - at least n and at most m of preceding group
-`{n,m}?` or `*?` or `+?` - nongreedy match of preceding group
-`^spam` - string must begin with spam
-`spam?` - string must end with spam 
-`.` - matches any character, except newline 
-`[abc]` - matches any character between brackets
-`[^abc]` - matches any character that isn't between brackets
+`?` - zero or one of preceding group  
+`*` - zero or more of preceding group  
+`+` - one or more of preceding group  
+`{n}` - exactly n of preceding group  
+`{n,}` - n or more of preceding group  
+`{,m}` - 0 to m of preceding group  
+`{n,m}` - at least n and at most m of preceding group  
+`{n,m}?` or `*?` or `+?` - nongreedy match of preceding group  
+`^spam` - string must begin with spam  
+`spam?` - string must end with spam  
+`.` - matches any character, except newline  
+`[abc]` - matches any character between brackets  
+`[^abc]` - matches any character that isn't between brackets  
 
 ## Case insensitive
 `re.IGNORECASE` or `re.I` as second argument of `re.compile`
 
 ## Substitution
-`namesRegex = re.compile(r'Agent \w+')`
-`namesRegex.sub('CENSORED', 'Agent Alice gave the secret documents to Agent Bob.')`
+```
+namesRegex = re.compile(r'Agent \w+')
+namesRegex.sub('CENSORED', 'Agent Alice gave the secret documents to Agent Bob.')
+```
+
 Output: `'CENSORED gave the secret documents to CENSORED.'`
 
 Using matched text as part of substitution: using `\1`, `\2` as text group in substitution:
