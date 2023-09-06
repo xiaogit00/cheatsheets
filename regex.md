@@ -52,3 +52,15 @@ phoneRegex = re.compile(r'''(
     (\s*(ext|x|ext.)\s*\d{2,5})?  
     )''', re.VERBOSE)
 ```
+
+## Using Regex in Python
+```
+import re
+
+phoneRegex = re.compile(r'\d\d\d\d\d')
+
+mo = phoneRegex.search(text)
+
+print(mo.group())
+
+```
