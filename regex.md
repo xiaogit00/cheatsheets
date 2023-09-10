@@ -23,6 +23,9 @@
 `[abc]` - matches any character between brackets  
 `[^abc]` - matches any character that isn't between brackets  
 
+## Findall
+`phoneRegex.findall(text)` - returns an array of matches  
+
 ## Case insensitive
 `re.IGNORECASE` or `re.I` as second argument of `re.compile`
 
