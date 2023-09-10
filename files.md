@@ -60,3 +60,8 @@ To consume:
 `import shelve`  
 `shelfFile = shelve.open('mydata)`  
 `shelfFile['cats']`  
+
+Checking out shelve  
+`shelfFile = shelve.open('mydata')`  
+`list(shelfFile.keys())`  
+`list(shelfFile.values())`  
