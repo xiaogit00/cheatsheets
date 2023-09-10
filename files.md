@@ -32,7 +32,7 @@ This will create all the following nested folders.
 `filePath.split(os.sep)` - returns an array of (dir) folders & file name   
 
 ### File size:
-`os.path.getsize(path)` - size in bytes of the file in path
+`os.path.getsize(path)` - size in bytes of the file in path  
 `os.listdir(path)` - return a list of filename strings 
 
 ### Path validity:
@@ -51,12 +51,12 @@ This will create all the following nested folders.
 `sampleFile.close()`
 
 ### Shelve module
-`import shelve`
-`shelfFile = shelve.open('mydata')` - creates a shelf file *mydata.db* at pwd
-`shelfFile['cats'] = ['cat1', 'cat2', 'cat3']` - saves the value into 'cats' key
-`shelfFile.close()`
+`import shelve`  
+`shelfFile = shelve.open('mydata')` - creates a shelf file *mydata.db* at pwd  
+`shelfFile['cats'] = ['cat1', 'cat2', 'cat3']` - saves the value into 'cats' key  
+`shelfFile.close()`  
 
 To consume:
-`import shelve`
-`shelfFile = shelve.open('mydata)`
-`shelfFile['cats']`
+`import shelve`  
+`shelfFile = shelve.open('mydata)`  
+`shelfFile['cats']`  
