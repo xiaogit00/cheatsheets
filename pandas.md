@@ -1,3 +1,6 @@
+### Series 
+`s2 = pd.to_numeric(s1, errors='coerce')` - converting a series to a different type  
+
 ### Reading csv / excel
 `pd.read_csv()`  
 `pd.read_excel()`  
@@ -70,6 +73,7 @@ Writing to different sheets in excel.
 `s = edu['value'].apply(np.sqrt)` - applies sqrt function using .apply() on column
 `s = edu['value'].apply(lambda d: d**2)` - applying a lambda function to 'value' column  
 
+
 ### Adding/Removing columns
 `edu['ValueNorm'] = edu['Value']/edu['Value'].max()` - dividing the value column by max value of same column to get a series, assigning it to new column  
 `edu.drop('ValueNorm', axis = 1)` - axis 0 removes rows, axis 1 removes columns. Return a copy of the modified data. 
@@ -129,12 +133,12 @@ Pivot has `aggr_function` argument that allows us to perform aggregation functio
 `edu.rank(ascending = False, method = 'first')`  
 
 ### Concat & Merge
-`df3 = pd.concat([df1, df2])`
-`df3 = pd.concat([df1, df2], ignore_index = True)`
-`df3 = pd.concat([df1, df2], keys = ["india", "us"])`
-`pd.concat([df, s], axis = 1)` - Adding a series to DF
-`df3 = pd.merge(df1, df2, on='city')`  
-`df5 = pd.merge(df1, df2, on='city', how='left')`  
+`df3 = pd.concat([df1, df2])`  
+`df3 = pd.concat([df1, df2], ignore_index = True)`  
+`df3 = pd.concat([df1, df2], keys = ["india", "us"])`  
+`pd.concat([df, s], axis = 1)` - Adding a series to DF  
+`df3 = pd.merge(df1, df2, on='city')`    
+`df5 = pd.merge(df1, df2, on='city', how='left')`    
 
 
 ### Plotting

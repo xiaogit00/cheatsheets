@@ -12,3 +12,4 @@
 `f = np.eye(2)` - Create a 2X2 identity matrix  
 `np.random.random((2,2))` - Create an array with random values  
 `np.empty((3,2))` - Create an empty array  
+`np.random.randint(0, 10, 10)` - Create an array of 10 integers btwn 0 to 10  
