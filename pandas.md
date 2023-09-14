@@ -1,5 +1,6 @@
 ### Series 
 `s2 = pd.to_numeric(s1, errors='coerce')` - converting a series to a different type  
+`s2[s2 < 5]` - filter for series values   
 
 ### Reading csv / excel
 `pd.read_csv()`  
