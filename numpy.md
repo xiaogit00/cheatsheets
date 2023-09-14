@@ -13,3 +13,10 @@
 `np.random.random((2,2))` - Create an array with random values  
 `np.empty((3,2))` - Create an empty array  
 `np.random.randint(0, 10, 10)` - Create an array of 10 integers btwn 0 to 10  
+
+### Union/Intersection
+`np.union1d(s2, s3)` - unique values in both s2 and s3 (union)  
+`np.intersect1d(s2, s3)` - items common to both s2 and s3 (intersection)  
+
+### Stats
+`np.percentile(s1, q=[0, 25, 50, 75, 100])` - given s1, return an array of percentiles  

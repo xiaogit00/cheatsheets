@@ -1,6 +1,10 @@
 ### Series 
 `s2 = pd.to_numeric(s1, errors='coerce')` - converting a series to a different type  
-`s2[s2 < 5]` - filter for series values   
+`s2[s2 < 5]` - filter for series values  
+`s2.reindex(index = [1, 0, 5,4,5,6,7,8,9])` - changing order of index  
+`s1.value_counts()` - count the number of times a unique value appear in s1  
+`s1[s1!=5] = 'Other'` - assigns all numbers !=5 to a string 'Other'  
+`s1[[0, 1, 3, 22]]` - getting values at specific positions  
 
 ### Reading csv / excel
 `pd.read_csv()`  
@@ -44,7 +48,7 @@ Writing to different sheets in excel.
 `df[['event', 'value']]` - selecting both columns  
 `df[df.X == df.X.max()]` - get row where X is max
 `df[10:14]` - selecing only row 10 to 13, by position (not index)  
-`df.ix[90:94, ['Values', 'Time']]` - selecting rows 90:94 by index, and columns by index  
+`df.iloc[90:94, ['Values', 'Time']]` - selecting rows 90:94 by index, and columns by index  
 `df[df['Values'] > 5]` - returns only rows with *Values* more than 5  
 `df[df['Values'].isnull()]` - returns only rows with *Values* is null  
 `df['col'][0]` - row 0 of column col1  
@@ -53,8 +57,13 @@ Writing to different sheets in excel.
 `df.iloc[1:3, 0]` - row 1, 2 of col0  
 `df.iloc[[0, 1, 2], 0]` - rows 0, 1, 2 of col0  
 `df.loc[0, 'country]` - value at desired location: here, row 0, country.  
+`df.loc['d', 'name'] = 'Suresh'` - changing value of one cell  
+`~s1.isin(s2)` - The tilde sign (~) in Pandas DataFrame is a logical operator used to invert a boolean array.  
+`df[df['score'].between(15,20)]` - return rows where score is between 15 and 20.  
+`df[(df['attempts'] < 2) & (df['score'] > 15)]` - two conditions  
 
 ### Quick stats / Aggregation
+`df.info()` - quick summary  
 `df.describe()` - quick stats  
 `df.count()` - num of non-null observations  
 `df.sum()`  
@@ -79,11 +88,20 @@ Writing to different sheets in excel.
 `edu['ValueNorm'] = edu['Value']/edu['Value'].max()` - dividing the value column by max value of same column to get a series, assigning it to new column  
 `edu.drop('ValueNorm', axis = 1)` - axis 0 removes rows, axis 1 removes columns. Return a copy of the modified data. 
 `edu.drop('ValueNorm', axis = 1, inplace = True)` - does not return copy of data. 
+`df['color'] = ['Red', 'Blue', 'Green']` - add a new column  
+`df.rename(columns={'name': 'Name', 'score':'Score'}, inplace=True)` - renaming columns  
+`df[['col2', 'col3', 'col1']]` - reordering columns  
 
 ### Appending/removing rows
-`edu = edu.append({"Time": 2000, "Value": 5.00}, ignore_index=True)` - expects a dict where the keys are the name of the columns, and the values being values. If *ignore_index* is not specified, index 0 will be given to this new row, and will produce an error if it already exists.  
+`pd.concat([df, pd.DataFrame(newRow, index=['k'])])` - expects a dict where the keys are the name of the columns, and the values being values. If *ignore_index* is not specified, index 0 will be given to this new row, and will produce an error if it already exists.  
 `edu.drop(max(edu.index), axis = 0, inplace=True)` - remove last row  
 `eduDrop = edu.drop(edu['Value'].isnull(), axis = 0)` - copy of df without NaN values.  
+
+### Iterating over rows
+```
+for i, row in df.iterrows():
+    print(row['col1'], row['col2'])
+```
 
 ### Dropping all na values
 `edu.dropna(how = 'any', subset = ['Value'])` - erase any row that contains an NaN value, for the "Value" column  
@@ -116,6 +134,7 @@ df = pd.read_csv('sample.csv', converters = {
 
 ### Sorting
 `edu.sort_values(by='Value', ascending = False, inplace = True)`  
+`df.sort_values(by=['name', 'score'], ascending=[False, True])` - first column descending, second column ascending  
 `edu.sort_index(axis = 0, ascending = True, inplace = True)` - return to original order (sort by index using sort_index and axis = 0)
 
 ### Grouping data
