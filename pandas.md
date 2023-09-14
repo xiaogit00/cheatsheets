@@ -64,6 +64,7 @@ Writing to different sheets in excel.
 `~s1.isin(s2)` - The tilde sign (~) in Pandas DataFrame is a logical operator used to invert a boolean array.  
 `df[df['score'].between(15,20)]` - return rows where score is between 15 and 20.  
 `df[(df['attempts'] < 2) & (df['score'] > 15)]` - two conditions  
+`df['EDUC1'].isnull().values.any()` - check whether there's any null  
 
 ### Quick stats / Aggregation
 `df.info()` - quick summary  
