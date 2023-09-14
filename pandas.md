@@ -12,6 +12,7 @@
 `pd.read_csv('sample.csv', usecols=['Time', 'Geo', 'Value'])`  
 `df.set_index('X', inplace=True)` - sets X as index
 `df.reset_index(inplace = True)`
+`s.reset_index(name='Number of People')` - renames the column name of a series  
 `df.loc['Snow']` - locates by index, returns all 'Snow' index
 `pd.read_csv(...nrows = 3)` - num of rows to read  
 `pd.read_csv(... na_values=["not available", "na"])` - specify na values
@@ -19,6 +20,7 @@
 
 ### Saving
 `dv.to_csv('new.csv')`  
+`df.to_csv('txt.csv', sep='\t')` - tab separator  
 `df.to_csv('new.csv', index=False)` - no index  
 `df.to_csv('new.csv', columns=['tickers', 'eps'])` - export certain columns  
 `df.to_excel('new.xlsx', sheet_name='stocks', startrow=1, startcol=2)`  
@@ -95,6 +97,7 @@ Writing to different sheets in excel.
 ### Appending/removing rows
 `pd.concat([df, pd.DataFrame(newRow, index=['k'])])` - expects a dict where the keys are the name of the columns, and the values being values. If *ignore_index* is not specified, index 0 will be given to this new row, and will produce an error if it already exists.  
 `edu.drop(max(edu.index), axis = 0, inplace=True)` - remove last row  
+`df = df1[df1.name != "Dima"]` - drop a specific column by value  
 `eduDrop = edu.drop(edu['Value'].isnull(), axis = 0)` - copy of df without NaN values.  
 
 ### Iterating over rows
