@@ -36,6 +36,7 @@ Writing to different sheets in excel.
 `pd.DataFrame(dict, index = [])`
 `pd.Series([])`
 `pd.Series([], index = [], name='')`
+`df.columns = ['col1', 'col2']` - creates columns after you create a dataframe.  
 
 
 ### DF attributes
@@ -79,6 +80,7 @@ Writing to different sheets in excel.
 `df.max(axis=0)` - max for each column  
 `df.max(axis=1)` - max for each row  
 `df.item_name.nunique()` - count of unique in series  
+`int(len(df1)/len(df))` - where df1 is a subset of df, to find proportion  
 
 ### Arithmatic
 `s = edu['value']/100` - applies operation over value column, and return a series  
@@ -97,7 +99,7 @@ Writing to different sheets in excel.
 ### Appending/removing rows
 `pd.concat([df, pd.DataFrame(newRow, index=['k'])])` - expects a dict where the keys are the name of the columns, and the values being values. If *ignore_index* is not specified, index 0 will be given to this new row, and will produce an error if it already exists.  
 `edu.drop(max(edu.index), axis = 0, inplace=True)` - remove last row  
-`df = df1[df1.name != "Dima"]` - drop a specific column by value  
+`df = df1[df1.name != "Dima"]` - drop a specific column by value   
 `eduDrop = edu.drop(edu['Value'].isnull(), axis = 0)` - copy of df without NaN values.  
 
 ### Iterating over rows
@@ -166,6 +168,7 @@ Pivot has `aggr_function` argument that allows us to perform aggregation functio
 
 ### Plotting
 `totalSum.plot(kind='bar', style='b', alpha=0.4, title = 'Total values for Country)` - style = color of bars set to blue; alpha is a percentage, producing a more translucent plot  
+`df['age'].hist(bins=20)` - plots a histogram of the age column, with 20 segments  
 
 ### Periods
 - a class that represents a duration of time  
