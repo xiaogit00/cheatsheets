@@ -1,4 +1,4 @@
-@baseurl = https://financialmodelingprep.com/api/v3
+@baseurl = https://financialmodelingprep.com/api/v3  
 @ticker = AAPL
 @apikeyString = apikey={{fmpApiKey}}
 @startDate = from=2018-03-12
