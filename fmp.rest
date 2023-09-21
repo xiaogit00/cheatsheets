@@ -1,0 +1,59 @@
+@baseurl = https://financialmodelingprep.com/api/v3
+@ticker = AAPL
+@apikeyString = apikey={{fmpApiKey}}
+@startDate = from=2018-03-12
+@endDate = to=2019-03-12
+
+# Quote: Spot Price, %change, MCAP, Volume, EPS, PE, Next earnings ann, timestamp
+GET {{baseurl}}/quote/{{ticker}}?{{apikeyString}}
+###
+
+# Historical price (daily)
+GET {{baseurl}}/historical-price-full/{{ticker}}?serietype=line&{{apikeyString}}
+###
+
+# Historical price (daily) between dates
+GET {{baseurl}}/historical-price-full/{{ticker}}?serietype=line&{{startDate}}&{{endDate}}&{{apikeyString}}
+###
+
+#Historical Price (daily) w change & volume
+GET {{baseurl}}/historical-price-full/{{ticker}}?{{apikeyString}}
+###
+
+# Spot TTM ratios: PE, Current, Quick, Cash, daysOfSales, gross Profit margin
+# ROA, ROE, netIncome, ebit, debt, receivables turnovers, payables, operating cashflow, PB/PS, EV, 
+GET {{baseurl}}/ratios-ttm/{{ticker}}?{{apikeyString}}
+
+###
+# Annual Historical ratios
+GET {{baseurl}}/ratios/{{ticker}}?limit=20&{{apikeyString}}
+###
+
+# Quarterly historical ratios
+GET {{baseurl}}/ratios/{{ticker}}?period=quarter&limit=20&{{apikeyString}}
+###
+
+# Key Metrics (TTM): 
+# EPS, NI, MCap, PE, PS, D2E, CurrentRatio, dividend, graham, netnet, workingCapital, TAV, 
+GET {{baseurl}}/key-metrics-ttm/{{ticker}}?limit=20&{{apikeyString}}
+###
+
+# Key Metrics (Annual)
+GET {{baseurl}}/key-metrics/{{ticker}}?limit=20&{{apikeyString}}
+###
+
+# Key Metrics (Quarterly)
+GET {{baseurl}}/key-metrics/{{ticker}}?limit=20&period=quarter&{{apikeyString}}
+###
+
+# DCF
+GET {{baseurl}}/discounted-cash-flow/{{ticker}}?{{apikeyString}}
+# Calculations: https://site.financialmodelingprep.com/developer/docs/dcf-formula/
+###
+
+# Historical DCF
+GET {{baseurl}}/historical-discounted-cash-flow-statement/{{ticker}}?{{apikeyString}}
+###
+
+# Executive compensation
+GET {{baseurl}}/governance/executive_compensation?symbol={{ticker}}&{{apikeyString}}
