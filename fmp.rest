@@ -57,3 +57,4 @@ GET {{baseurl}}/historical-discounted-cash-flow-statement/{{ticker}}?{{apikeyStr
 
 # Executive compensation
 GET {{baseurl}}/governance/executive_compensation?symbol={{ticker}}&{{apikeyString}}
+###
