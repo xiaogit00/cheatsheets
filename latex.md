@@ -32,3 +32,17 @@ PV = \frac{FV}{(1+r)^n}
 ### Escaping the dollar sign in Jupyter Notebook
 //$
 
+### Subscripts
+R_{mkt}
+R_i
+
+### Greek letters
+\sigma
+\rho
+\beta
+
+### Summation  
+\sum_{lower}^{higher}
+
+### Bar (mean)
+\bar{R}
