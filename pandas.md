@@ -206,3 +206,7 @@ Resampling frequency:
 `import pandas_market_calendars as mcal`  
 `nyse = mcal.get_calendar('NYSE')`  
 `startDate = nyse.valid_days(start_date='2001-01-01', end_date='2001-12-01)`  
+
+### Displaying
+`pd.set_option('display.max_columns', 50)` - displaying the full columns
+`pd.set_option('display.max_rows', 500)` - displaying the full rows
