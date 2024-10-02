@@ -7,4 +7,4 @@
 > TtestResult(statistic=27.059409957536303, pvalue=4.3597985712286377e-159, df=26434)  
 > null hypo: no statistical difference between sample mean and population mean  
 > if p-value < 0.05 (significance value), can't reject null hypothesis 
-
+`stats.ttest_ind(motors, bicycles, equal_var=False)` - compares between two sample means -> checks for statistically significant difference. 
