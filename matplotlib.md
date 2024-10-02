@@ -70,8 +70,9 @@ plt.show()
 `labels = ax.get_xticklabels()`  - get the current labels, for further styling for instance  
 `plt.setp(labels, rotation=45, horizontalalignment='right')` - tilts the x axis labels to the right  
 
-## Changing Y axis to currency:
-`plt.gca().yaxis.set_major_formatter(mtick.FuncFormatter(lambda y, pos: numerize.numerize(y)))`  
+## Changing Y axis to format:
+`plt.gca().yaxis.set_major_formatter(mtick.FuncFormatter(lambda y, pos: numerize.numerize(y)))`  - currency
+`plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))` - percentage  
 
 ## Figure size
 `plt.figure(figsize=())`

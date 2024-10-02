@@ -5,6 +5,8 @@
 `s1.value_counts()` - count the number of times a unique value appear in s1  
 `s1[s1!=5] = 'Other'` - assigns all numbers !=5 to a string 'Other'  
 `s1[[0, 1, 3, 22]]` - getting values at specific positions  
+`s.get('s')` - gets without throwing errors
+`s.to_numpy()` - converts to a numpy array
 
 ### Reading csv / excel
 `pd.read_csv()`  
@@ -90,6 +92,7 @@ Writing to different sheets in excel.
 
 
 ### Adding/Removing columns
+`df = df.rename(columns={'oldColumn': 'newColumn', 'oldC2':'newC2'})` - renames columns
 `edu['ValueNorm'] = edu['Value']/edu['Value'].max()` - dividing the value column by max value of same column to get a series, assigning it to new column  
 `edu.drop('ValueNorm', axis = 1)` - axis 0 removes rows, axis 1 removes columns. Return a copy of the modified data. 
 `edu.drop('ValueNorm', axis = 1, inplace = True)` - does not return copy of data. 
@@ -109,11 +112,10 @@ for i, row in df.iterrows():
     print(row['col1'], row['col2'])
 ```
 
-### Dropping all na values
+### Cleaning
 `edu.dropna(how = 'any', subset = ['Value'])` - erase any row that contains an NaN value, for the "Value" column  
-
-### Dropping duplicates
 `df.drop_duplicates(subset=['col1'])` - drop duplicates of col1  
+`df[name] = df[name].str.strip()` - cleans whitespaces
 
 ### Fillna 
 `edu.fillna(value = {"Value": 0})` - value takes a dict, with column being the name of the column to fill, and the value to fill.  
@@ -146,6 +148,10 @@ df = pd.read_csv('sample.csv', converters = {
 ### Grouping data
 `edu[["Geo", "Value"]].groupby("Geo").mean()` - must always have an aggregation function applied.  
 `g.get_group('mumbai)` - gets only this group  
+`df['Order_type'].value_counts()` - counts the numbers of each group 
+`df.groupby(['OrderType', 'Vehicle']).groups` - selects index belong to the groups
+> {('Buffet', 'bicycle'): [1624, 1681, 1961, 2951,...
+`df.groupby(['OrderType', 'Vehicle']).get_group(("Drinks", "motorcycle"))` - gets data of a specific group 
 
 ### Pivoting
 `pivedu = pd.pivot_table(edu[edu['Time']>2005], values = "Value", index = ['Geo'], columns = ['Time'])` - changing a previous column values (GEO) to index, and a column value (time) to column. The values will be from the value column.  
@@ -210,3 +216,4 @@ Resampling frequency:
 ### Displaying
 `pd.set_option('display.max_columns', 50)` - displaying the full columns
 `pd.set_option('display.max_rows', 500)` - displaying the full rows
+

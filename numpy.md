@@ -14,6 +14,13 @@
 `np.empty((3,2))` - Create an empty array  
 `np.random.randint(0, 10, 10)` - Create an array of 10 integers btwn 0 to 10  
 
+### Reshaping
+`np.arange(24).reshape(4, 2, 3)` - creates a 3D array, 4 blocks, each containing 3x2 elements
+
+### Array slicing
+`a[3, 2, 1]` - gets first block, second element, and 1st element 
+`a[3, 0:1, 1]` - slices the second dimension
+
 ### Union/Intersection
 `np.union1d(s2, s3)` - unique values in both s2 and s3 (union)  
 `np.intersect1d(s2, s3)` - items common to both s2 and s3 (intersection)  
