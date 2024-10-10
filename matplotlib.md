@@ -1,6 +1,19 @@
 ## Basics
 pyplot is an API for matplotlib that provides simple functions for adding plot elements, such as lines, images, etc, to the axes of the current figure. It is defined by statefulness, meaning it stores the state of the object when you first plot it. This allows you to continuously plot over the same chart. 
 
+### importing
+%matplotlib inline 
+import matplotlib.pyplot as plt
+
+### Quick sketches
+x = np.linspace(0, 10, 100) - 100 evenly spaced samples between 0 and 10
+plt.plot(x, np.sin(x), label="sin(x)")  
+plt.legend()
+plt.ylabel('Y')
+plt.xlabel('X')
+plt.grid( visible = True)
+plt.show()  
+
 ### Key Concepts
 **Figures**
 The top level object in the scripting layer is the pyplot.figure(). The Figure is an object that keeps the whole image output. 
