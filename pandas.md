@@ -145,7 +145,9 @@ df = pd.read_csv('sample.csv', converters = {
 `df.sort_values(by=['name', 'score'], ascending=[False, True])` - first column descending, second column ascending  
 `edu.sort_index(axis = 0, ascending = True, inplace = True)` - return to original order (sort by index using sort_index and axis = 0)
 
-### Grouping data
+### Grouping data  
+showsByMonth = shows.groupby( "Date.Month", sort=True ).mean( numeric_only=True ) 
+`fourRoom.groupby('town').mean(numeric_only=True)`- only groups numeric-values   
 `edu[["Geo", "Value"]].groupby("Geo").mean()` - must always have an aggregation function applied.  
 `g.get_group('mumbai)` - gets only this group  
 `df['Order_type'].value_counts()` - counts the numbers of each group 
