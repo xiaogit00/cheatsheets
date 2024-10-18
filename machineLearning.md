@@ -2,6 +2,12 @@
 
 Scikit-learn is a ML library. It contains libraries commonly used for data preprocessing. Preprocessing is useful for changing raw feature vectors into representations more suitable for classification or regression
 
+[Standardization](#standardization)
+[Normalization](#normalization)
+[One Hot Encoding](#one-hot-encoding)
+[Discretization]
+[Theory](#theory)
+
 #### Importing
 `from sklearn import preprocessing`
 
@@ -94,7 +100,35 @@ INTO:
 [0., 0., 1., ..., 1., 0., 0.]]
 ```
 
-## Theory
+`oh_enc.categories_` - returns the values of categories in qn  
+
+#### Discretization  
+`discretizer = preprocessing.KBinsDiscretizer()`
+
+At this step, you need to convert your target process column into an nx1 array  
+`age_arr = np.array(data['age']).reshape(-1, 1)`  
+```
+[[80], 
+[15],
+[48]]
+```  
+`discretizer.fit(age_arr)` - must fit first, if not will output error when transforming ; returns KBinsDiscretizer object
+`k = discretizer.transform(age_arr)`  -> returns sparse matrix
+`k.toarray()`  
+
+```
+[[0., 0., 0., 0., 1.],
+[0., 0., 0., 0., 1.],
+[0., 0., 1., 0., 0.],
+...,
+[0., 0., 1., 0., 0.],
+[0., 0., 1., 0., 0.],
+[0., 0., 0., 0., 1.]]
+```
+
+---
+
+# Theory
 
 ### Transformers  
 - a class used in sklearn that enable data transformation
@@ -157,7 +191,7 @@ What you're doing when running one hot encoding, is assigning a unique 'bitmap' 
 For instance, the first sample, with values 2, 4, 3, will be assigned:
 [0, 0, 1, 0, 0, 0, 1, 1, 0, 0]
 
-The length of this array will correspond to the total categories in question. 
+The length of this array will correspond to the total categories in question. (10 in this case)
 
 Each bit corresponds to the presence or absence of an element. 
 
@@ -165,3 +199,9 @@ Each bit corresponds to the presence or absence of an element.
 
 This is pretty powerful - it allows you to quickly see the similarities between certain samples just by counting the length of sth.  
 
+### Discretization
+Putting continuous values into bins - very useful when combined with one hot encoding - making our model more expressive. 
+
+For instance, age bins.  
+
+The theory of discretization + one hot encoding is this: you have age column with values ranging 28 to 89. You want to put them into 5 bins. If you just discretize, the values will be 1, 2, 3, 4, 5 for the column. If you combine OHE, it'll be [0, 0, 0, 1, 0] for one of them.  
