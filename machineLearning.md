@@ -40,7 +40,7 @@ Standardization
 ```
 TRANSFORMS a numerical DF: 
 
-    a    b    c  d  e
+    a    b    c    d    e
 0	130	322	109	2.4	3
 1	115	564	160	1.6	0
 2	124	261	141	0.3	0
