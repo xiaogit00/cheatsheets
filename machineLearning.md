@@ -34,8 +34,7 @@ Standardization
 - If a feature has a v large relative variance, it might end up dominating the estimator, and not learn well from other features. 
 
 `scaler = preprocessing.StandardScaler()`   
-`num_scaled = scaler.fit_transform(data.iloc[:, num_features])`
-- quick way to perform standardization to an array-like dataset. Scaled data will have 0 mean and unit variance. 
+`num_scaled = scaler.fit_transform(data.iloc[:, num_features])`  
 
 ```
 TRANSFORMS a numerical DF: 
