@@ -11,6 +11,12 @@ Scikit-learn is a ML library. It contains libraries commonly used for data prepr
 
 [Discretization](#discretization)
 
+[Polynomial Feature Construction](#polynomial-feature-construction)
+
+[Pipeline and CustomTransformers](#pipeline-and-columntransformer)
+
+[Missing values and Imputing](#cleaning-missing-values-and-imputing)
+
 [Theory](#theory)
 
 ### Importing
