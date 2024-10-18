@@ -33,7 +33,7 @@ Standardization
 - Feature scaling through standardization (or z-score normalization) can be an important preprocessing step for ML algos.  
 - If a feature has a v large relative variance, it might end up dominating the estimator, and not learn well from other features. 
 
-`scaler = preprocessing.StandardScaler()` 
+`scaler = preprocessing.StandardScaler()`   
 `num_scaled = scaler.fit_transform(data.iloc[:, num_features])`
 - quick way to perform standardization to an array-like dataset. Scaled data will have 0 mean and unit variance. 
 
@@ -61,6 +61,8 @@ INTO:
 [ 0.48548982,  0.85947603,  0.14367747,  0.21870599, -0.71153494],
 [ 0.48548982, -1.11763472, -0.07255953, -0.56863558, -0.71153494],
 [ 1.60728915,  0.70440852, -1.80245551,  0.39367078,  2.47268219]]
+
+Note it'll be an array with R arrays, each with C items. Note the negative number in the first array item means 130 is below the mean, slightly. 
 ```
 
 
