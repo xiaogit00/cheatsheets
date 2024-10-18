@@ -13,10 +13,10 @@ Scikit-learn is a ML library. It contains libraries commonly used for data prepr
 
 [Theory](#theory)
 
-#### Importing
+### Importing
 `from sklearn import preprocessing`
 
-#### Standardization  
+### Standardization  
 `scaler = preprocessing.StandardScaler()`   
 
 `num_scaled = scaler.fit_transform(data.iloc[:, num_features])` - transforms only numerical data
@@ -52,7 +52,7 @@ Note it'll be an array with R arrays, each with C items. Note the negative numbe
 
 `num_scaled.var(axis=0)` - check that var is 1 
 
-#### Normalization 
+### Normalization 
 `normalizer = preprocessing.Normalizer()`  
 
 `num_normalized = normalizer.fit_transform(data.iloc[:, num_features])`  
@@ -74,10 +74,10 @@ For the first number of first row, it's derived with:
 130 / sqrt(130**2 + 322**2 + 109**2 + 2.4**2 + 3**2)
 ```
 
-#### Encoding Ordinal Data
+### Encoding Ordinal Data
 `ord_enc = preprocessing.OrdinalEncoder( categories='auto' )`
 
-#### One Hot Encoding  
+### One Hot Encoding  
 `oh_enc = preprocessing.OneHotEncoder( categories='auto', handle_unknown='ignore')` - if you specify handle unknown = ignore, if encoder finds unknown categories during transformation, the resulting column for this feature will be all zeros. 
 
 `oh_enc.fit_transform(data.iloc[:, cat_features])` -> returns sparse matrix   
@@ -112,7 +112,7 @@ INTO:
 
 `oh_enc.categories_` - returns the values of categories in qn  
 
-#### Discretization  
+### Discretization  
 `discretizer = preprocessing.KBinsDiscretizer()`
 
 At this step, you need to convert your target process column into an nx1 array :
