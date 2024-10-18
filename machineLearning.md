@@ -2,10 +2,15 @@
 
 Scikit-learn is a ML library. It contains libraries commonly used for data preprocessing. Preprocessing is useful for changing raw feature vectors into representations more suitable for classification or regression
 
+### Table of Content  
 [Standardization](#standardization)
+
 [Normalization](#normalization)
+
 [One Hot Encoding](#one-hot-encoding)
-[Discretization]
+
+[Discretization](#discretization)
+
 [Theory](#theory)
 
 #### Importing
