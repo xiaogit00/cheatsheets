@@ -43,6 +43,7 @@ INTO:
 Note it'll be an array with R arrays, each with C items. Note the negative number in the first array item means 130 is below the mean, slightly. 
 ```
 `num_scaled.mean(axis=0)` - check that mean is 0
+
 `num_scaled.var(axis=0)` - check that var is 1 
 
 #### Normalization 
