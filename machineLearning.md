@@ -13,6 +13,7 @@ Scikit-learn is a ML library. It contains libraries commonly used for data prepr
 
 #### Standardization  
 `scaler = preprocessing.StandardScaler()`   
+
 `num_scaled = scaler.fit_transform(data.iloc[:, num_features])` - transforms only numerical data
 
 ```
@@ -48,6 +49,7 @@ Note it'll be an array with R arrays, each with C items. Note the negative numbe
 
 #### Normalization 
 `normalizer = preprocessing.Normalizer()`  
+
 `num_normalized = normalizer.fit_transform(data.iloc[:, num_features])`  
 
 ```
@@ -72,7 +74,9 @@ For the first number of first row, it's derived with:
 
 #### One Hot Encoding  
 `oh_enc = preprocessing.OneHotEncoder( categories='auto', handle_unknown='ignore')` - if you specify handle unknown = ignore, if encoder finds unknown categories during transformation, the resulting column for this feature will be all zeros. 
+
 `oh_enc.fit_transform(data.iloc[:, cat_features])` -> returns sparse matrix   
+
 `oh_enc.fit_transform(data.iloc[:, cat_features]).toarray()` -> to view sparse matrix
 
 ```
@@ -106,15 +110,19 @@ INTO:
 #### Discretization  
 `discretizer = preprocessing.KBinsDiscretizer()`
 
-At this step, you need to convert your target process column into an nx1 array  
+At this step, you need to convert your target process column into an nx1 array :
 `age_arr = np.array(data['age']).reshape(-1, 1)`  
+
 ```
 [[80], 
 [15],
 [48]]
 ```  
+
 `discretizer.fit(age_arr)` - must fit first, if not will output error when transforming ; returns KBinsDiscretizer object
+
 `k = discretizer.transform(age_arr)`  -> returns sparse matrix
+
 `k.toarray()`  
 
 ```
