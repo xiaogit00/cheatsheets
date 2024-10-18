@@ -140,6 +140,74 @@ At this step, you need to convert your target process column into an nx1 array :
 [0., 0., 0., 0., 1.]]
 ```
 
+### Polynomial Feature Construction
+`poly_tfr = preprocessing.PolynomialFeatures()`
+
+`poly_feats = poly_tfr.fit_transform(data.iloc[:, num_features])`
+
+`poly_tfr.get_feature_names_out()`
+
+```
+It converts the original features (5): 
+['rest_BP', 'cholesterol', 'ax_HR', 'oldpeak', 'vessels']
+
+into (21):
+['1', 'rest_BP', 'cholesterol', 'ax_HR', 'oldpeak', 'vessels',
+'rest_BP^2', 'rest_BP cholesterol', 'rest_BP ax_HR',
+'rest_BP oldpeak', 'rest_BP vessels', 'cholesterol^2',
+'cholesterol ax_HR', 'cholesterol oldpeak', 'cholesterol vessels',
+'ax_HR^2', 'ax_HR oldpeak', 'ax_HR vessels', 'oldpeak^2',
+'oldpeak vessels', 'vessels^2']
+
+5 (original) + 5C2 (10) + 5 (squared) + 1 = 21  
+```
+
+### Pipeline and ColumnTransformer
+`from sklearn import pipeline`
+
+`from sklearn import compose`
+
+`numeric_transformer = pipeline.Pipeline(steps=[('scalar', scaler), ('poly', poly_tfr)])` - chains the StandardScaler and PolynomialFeatures transformers earlier 
+
+`numeric_transformer.fit_transform(data)` 
+
+However, the above creates polynomial variables comprising nominal and real variables, doesn't make much sense. 
+
+**Column transformers** - performs different transformations for different columns
+```
+preprocessor = compose.ColumnTransformer(transformers=[
+    ('num', numeric_transformer, num_features), #name, transformer, columns
+    ('disc', discretizer, disc_features),
+    ('cat', oh_enc, cat_features),
+    ('ord', ord_enc, ordinal_features)
+], remainder="passthrough")
+
+processedData = preprocessor.fit_transform(data)
+```
+
+`data_processed = pd.DataFrame(processedData)` -- make back into DF 
+
+### Cleaning missing values and imputing 
+
+`from sklearn.impute import SimpleImputer`
+
+`imp_mean = SimpleImputer( missing_values=np.nan, strategy='mean' )`
+
+`imp_mean.fit(data_drop).statistics_` - to see what the values to impute for each column. 
+
+```
+[ 54.45769231,   0.67777778,   3.17407407, 131.34444444,
+249.65925926,   0.14814815,   1.02222222, 149.67777778,
+0.32962963,   1.05      ,   1.58518519,   0.67037037,
+4.6962963 ]
+- in this case, you're only interested in the first one, as that's the one with missing values
+```
+
+`data_filled = pd.DataFrame( imp_mean.transform(data_drop) )` - replaces those missing values with the mean!  
+
+`data_filled.columns, data_filled.index = data_drop.columns, data_drop.index` - recreating the column names again
+
+
 ---
 
 # Theory
@@ -219,3 +287,6 @@ Putting continuous values into bins - very useful when combined with one hot enc
 For instance, age bins.  
 
 The theory of discretization + one hot encoding is this: you have age column with values ranging 28 to 89. You want to put them into 5 bins. If you just discretize, the values will be 1, 2, 3, 4, 5 for the column. If you combine OHE, it'll be [0, 0, 0, 1, 0] for one of them.  
+
+### Polynomial Feature Construction
+Sometimes it's helpful to add complexity to model by considering non-linear features of input. `PolynomialFeatures` class allows us to generate higher order terms and interaction terms (representing joint effects of multiple features) to consider this non-linearity. 
