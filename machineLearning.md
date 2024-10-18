@@ -7,7 +7,7 @@ Scikit-learn is a ML library. It contains libraries commonly used for data prepr
 
 #### Standardization  
 `scaler = preprocessing.StandardScaler()`   
-`num_scaled = scaler.fit_transform(data.iloc[:, num_features])`  
+`num_scaled = scaler.fit_transform(data.iloc[:, num_features])` - transforms only numerical data
 
 ```
 TRANSFORMS a numerical DF: 
@@ -36,6 +36,63 @@ INTO:
 
 Note it'll be an array with R arrays, each with C items. Note the negative number in the first array item means 130 is below the mean, slightly. 
 ```
+`num_scaled.mean(axis=0)` - check that mean is 0
+`num_scaled.var(axis=0)` - check that var is 1 
+
+#### Normalization 
+`normalizer = preprocessing.Normalizer()`  
+`num_normalized = normalizer.fit_transform(data.iloc[:, num_features])`  
+
+```
+TRANSFORMS THE ABOVE INTO: 
+
+[[0.357, 0.885, 0.299, 0.007, 0.008],
+[0.192, 0.944, 0.268, 0.003, 0.   ],
+[0.386, 0.812, 0.439, 0.001, 0.   ],
+...,
+[0.389, 0.817, 0.425, 0.004, 0.   ],
+[0.5  , 0.686, 0.529, 0.001, 0.   ],
+[0.464, 0.829, 0.313, 0.004, 0.009]]
+
+*Note: Normalizer works on row data. formula: X' = X / |X|
+
+For the first number of first row, it's derived with:  
+130 / sqrt(130**2 + 322**2 + 109**2 + 2.4**2 + 3**2)
+```
+
+#### Encoding Ordinal Data
+`ord_enc = preprocessing.OrdinalEncoder( categories='auto' )`
+
+#### One Hot Encoding  
+`oh_enc = preprocessing.OneHotEncoder( categories='auto', handle_unknown='ignore')` - if you specify handle unknown = ignore, if encoder finds unknown categories during transformation, the resulting column for this feature will be all zeros. 
+`oh_enc.fit_transform(data.iloc[:, cat_features])` -> returns sparse matrix   
+`oh_enc.fit_transform(data.iloc[:, cat_features]).toarray()` -> to view sparse matrix
+
+```
+Transforms: 
+
+rest_ECG	chest	thal
+0	2	4	3
+1	2	3	7
+2	0	2	7
+3	0	4	7
+4	2	2	3
+...	...	...	...
+265	0	3	7
+266	0	2	7
+267	2	2	3
+268	0	4	6
+269	2	4	3
+
+INTO:
+[[0., 0., 1., ..., 1., 0., 0.],
+[0., 0., 1., ..., 0., 0., 1.],
+[1., 0., 0., ..., 0., 0., 1.],
+...,
+[0., 0., 1., ..., 1., 0., 0.],
+[1., 0., 0., ..., 0., 1., 0.],
+[0., 0., 1., ..., 1., 0., 0.]]
+```
 
 ## Theory
 
@@ -61,15 +118,50 @@ Generally, transformers can be used for scaling (standardization and normalizati
 ### Estimators  
 Class used to manage estimation and decoding of model. Can be used to discretization. 
 
-### Standardization and normalization 
-Standardization 
+### Standardization 
 - rescaling features so they have properties of standard normal distribution with mean of 0 and SD of 1.  
 - Feature scaling through standardization (or z-score normalization) can be an important preprocessing step for ML algos.  
 - If a feature has a v large relative variance, it might end up dominating the estimator, and not learn well from other features. 
 
 
-Normalization 
-- scaling individual samples to have unit norm, independent of distribution of the samples.  
+### Normalization 
+- scaling individual samples to have unit norm, independent of distribution of the samples. 
+- we can specify which norm to use (by default, it's l2 (Euclidean) norm) 
+- Remember vectors; normalization simply reduces it to unit size. 
 
 Standardization is feature-wise operation; Normalization is sample-wise operation. 
+
+### One Hot Encoding
+Assuming you have the following categorical variables:
+
+```
+rest_ECG	chest	thal
+0	2	4	3
+1	2	3	7
+2	0	2	7
+3	0	4	7
+4	2	2	3
+...	...	...	...
+265	0	3	7
+266	0	2	7
+267	2	2	3
+268	0	4	6
+269	2	4	3
+```
+rest_ECG takes the values: 0, 1, 2  
+chest takes the value 1, 2, 3, 4  
+thal takes the values: 3, 6, 7  
+
+What you're doing when running one hot encoding, is assigning a unique 'bitmap' to each unique combination of the samples.  
+
+For instance, the first sample, with values 2, 4, 3, will be assigned:
+[0, 0, 1, 0, 0, 0, 1, 1, 0, 0]
+
+The length of this array will correspond to the total categories in question. 
+
+Each bit corresponds to the presence or absence of an element. 
+
+**At its core, it basically 'compresses' data by transforming 3 columns into 1 column** -> before, you had 3 columns for categorical data; now, you only need to work with 1, the 'data_cat' column, and each value specifies a unique permutation of category. 
+
+This is pretty powerful - it allows you to quickly see the similarities between certain samples just by counting the length of sth.  
 
