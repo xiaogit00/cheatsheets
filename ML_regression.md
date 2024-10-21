@@ -4,7 +4,11 @@
 
 `import statsmodels.formula.api as smf`
 
-`est = sm.OLS( y: dataframe , sm.add_constant(X: dataframe) ).fit() ` - constructs regression of y = b0 + b1*X , where sm.add_constant literally just creates a constant column c, which is b0 column 
+`X = advertising[['TV']]`
+
+`y = advertising[['Sales']]`
+
+`est = sm.OLS( y, sm.add_constant(X) ).fit() ` - constructs regression of y = b0 + b1*X , where sm.add_constant literally just creates a constant column c, which is b0 column 
 
 `est = smf.ols( formula='Sales ~ TV', data=advertising ).fit()` - same thing, pasty format
 
