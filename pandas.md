@@ -113,6 +113,10 @@ for i, row in df.iterrows():
 ```
 
 ### Cleaning
+`df.isnull()` - returns a boolean mask of the original dataframe, if it's a null value, cell is true  
+`df.isnull().any()` - .any() returns True if any is True - in this case, returns boolean of columns with null values  
+`df.isnull().any(axis=1)` - returns boolean mask of rows with null values  
+`df[df.isnull().any(axis=1)]` - returns df where there's null in any rows  
 `edu.dropna(how = 'any', subset = ['Value'])` - erase any row that contains an NaN value, for the "Value" column  
 `df.drop_duplicates(subset=['col1'])` - drop duplicates of col1  
 `df[name] = df[name].str.strip()` - cleans whitespaces
