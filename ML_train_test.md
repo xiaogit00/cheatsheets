@@ -7,6 +7,27 @@
 
 `dfTrain, dfTest = train_test_split(data, test_size=0.2, random_state=rng)` - this simply splits the DF into 2 DFs, randomly, with ratio of 8:2. 
 
+### Stratified shuffle split
+`from sklearn.model_selection import StratifiedShuffleSplit` - splits data in a way that preserves distribution of one of the classes in the data 
+
+`sss = StratifiedShuffleSplit(n_splits=3, test_size=0.2, random_state=0)` - n_splits = number of sets of splits (like if you want 2 sets of train/test data, specify 2) 
+
+```
+y = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1, 1])
+
+for train_index, test_index in sss.split(X, y):
+    print("TRAIN:", train_index, "TEST:", test_index)
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+
+Output:
+TRAIN: [3 8 4 9 2 6 1 5] TEST: [0 7]
+TRAIN: [4 9 3 0 8 1 6 7] TEST: [2 5]
+TRAIN: [8 2 5 6 1 3 7 9] TEST: [4 0]
+
+Basically, if the ratio of your class of Y is 4:6, then in your training data, 4/10 will be from class 0, and 6/10 will be class 1; same for test data
+```
+
 ### Creating new features
 `x_train = sms_train[['length', 'word_count', 'processed_word_count']].to_numpy()` - using some new columns as features
 

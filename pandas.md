@@ -159,6 +159,10 @@ showsByMonth = shows.groupby( "Date.Month", sort=True ).mean( numeric_only=True 
 > {('Buffet', 'bicycle'): [1624, 1681, 1961, 2951,...
 `df.groupby(['OrderType', 'Vehicle']).get_group(("Drinks", "motorcycle"))` - gets data of a specific group 
 
+### Bins values into discrete categories
+`df['income_cat'] = pd.cut(df['median_income'], bins=[0, 1.5, 3, 4.5, 6, np.inf],labels=[1, 2, 3, 4, 5])` - sort income into 5 bins, creating a new column  
+`df['income_cat'].hist()` - view distribution of the 5 bins  
+
 ### Pivoting
 `pivedu = pd.pivot_table(edu[edu['Time']>2005], values = "Value", index = ['Geo'], columns = ['Time'])` - changing a previous column values (GEO) to index, and a column value (time) to column. The values will be from the value column.  
 
@@ -182,6 +186,10 @@ Pivot has `aggr_function` argument that allows us to perform aggregation functio
 ### Plotting
 `totalSum.plot(kind='bar', style='b', alpha=0.4, title = 'Total values for Country)` - style = color of bars set to blue; alpha is a percentage, producing a more translucent plot  
 `df['age'].hist(bins=20)` - plots a histogram of the age column, with 20 segments  
+`df.hist(bins=50, figsize=(20, 15))` - quickly plot a histogram to explore the data  
+`df2.plot(kind='scatter', x='longitude', y='latitude', alpha=0.1)` - scatterplot of points  
+`df2.plot(kind='scatter',  x="longitude", y="latitude", alpha=0.4, s=df2['population']/100, label='population', figsize=(10, 7), c='median_house_value', cmap=plt.get_cmap('jet'), colorbar=True)` - this is a super useful scatterplot: you assign the size of each point to one feature, and the color of another point to another feature with value. This allow you to quickly see the trends, for instance the places with highest population in this case and highest price.   
+![alt text](screenshots/scatterplot.png)
 
 ### Periods
 - a class that represents a duration of time  
