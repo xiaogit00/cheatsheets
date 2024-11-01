@@ -28,6 +28,12 @@ TRAIN: [8 2 5 6 1 3 7 9] TEST: [4 0]
 Basically, if the ratio of your class of Y is 4:6, then in your training data, 4/10 will be from class 0, and 6/10 will be class 1; same for test data
 ```
 
+```
+for train_index, test_index in split.split(housing, housing["income_cat"]):
+    strat_train_set = housing.loc[train_index]
+    strat_test_set = housing.loc[test_index]
+```
+
 ### Creating new features
 `x_train = sms_train[['length', 'word_count', 'processed_word_count']].to_numpy()` - using some new columns as features
 

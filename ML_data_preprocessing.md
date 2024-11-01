@@ -221,6 +221,18 @@ preprocessor = compose.ColumnTransformer(transformers=[
 processedData = preprocessor.fit_transform(data)
 ```
 
+```
+from sklearn.compose import ColumnTransformer 
+
+num_attribs = list(housing_num)
+cat_attribs = ['ocean_proximity']
+
+full_pipeline = ColumnTransformer([
+	('num', num_pipeline, num_attributes),
+	('cat', OneHotEncoder(), cat_attributes)
+])
+```
+
 `data_processed = pd.DataFrame(processedData)` -- make back into DF 
 
 ### Cleaning missing values and imputing 
