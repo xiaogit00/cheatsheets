@@ -81,14 +81,32 @@ For the first number of first row, it's derived with:
 ```
 
 ### Encoding Ordinal Data
-`ord_enc = preprocessing.OrdinalEncoder( categories='auto' )`
+`from sklearn.preprocessing import OrdinalEncoder`  
+
+`housing_cat = df[['ocean_proximity']]` - input *needs* to be dataframe  
+
+`ordinal_encoder = OrdinalEncoder()`
+
+`housing_cat_encoded = ordinal_encoder.fit_transform(housing_cat)`
+
+Transforms categorical values into an array: 
+```
+From "<1H OCEAN', 'INLAND', 'ISLAND', 'NEAR BAY', 'NEAR OCEAN']" to:
+array([[3.],
+       [3.],
+       [3.],
+       ...,
+       [1.],
+       [1.],
+       [1.]])
+```
 
 ### One Hot Encoding  
 `oh_enc = preprocessing.OneHotEncoder( categories='auto', handle_unknown='ignore')` - if you specify handle unknown = ignore, if encoder finds unknown categories during transformation, the resulting column for this feature will be all zeros. 
 
-`oh_enc.fit_transform(data.iloc[:, cat_features])` -> returns sparse matrix   
+`oh_enc.fit_transform(cat_df)` -> returns sparse matrix   
 
-`oh_enc.fit_transform(data.iloc[:, cat_features]).toarray()` -> to view sparse matrix
+`oh_enc.fit_transform(cat_df).toarray()` -> to view sparse matrix
 
 ```
 Transforms: 
@@ -174,6 +192,18 @@ into (21):
 `from sklearn import compose`
 
 `numeric_transformer = pipeline.Pipeline(steps=[('scalar', scaler), ('poly', poly_tfr)])` - chains the StandardScaler and PolynomialFeatures transformers earlier 
+
+```
+# Chaining Estimators/transformers
+
+num_pipeline = Pipeline([
+	('imputer', SimpleImputer(strategy="median")),
+	('attribs_adder', CombinedAttributesAdder()),
+	('std_scaler', StandardScaler())
+])
+
+housing_num_tr = num_pipeline.fit_transform(housing_num)
+```
 
 `numeric_transformer.fit_transform(data)` 
 
