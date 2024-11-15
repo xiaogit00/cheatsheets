@@ -30,6 +30,11 @@
 
 `learn.fine_tune(1)` - 'learn' only describes the architecture of the CNN, it doesn't do anyth until we tell it to fit the data. fine_tune is a variant of fit; if you start with pretrained model, you use fine_tune. param is the number of epochs - or, how many times to look at each image. 
 
+### Uploading an image and predicting
+`img = PILImage.create('bird.jpg')` - pil = python image library. simply creates an image 
+
+`is_cat,_,probs = learn.predict(img)` returns whether is cat and probability
+
 ## Text Classification
 `from fastai.text.all import *`
 
@@ -40,7 +45,21 @@
 `learn.fine_tune(4, 1e-2)` - 4 epochs 
 
 
+## Image segmentation
+`path = untar_data(URLs.CAMVID_TINY)`
+```
+dls = SegmentationDataLoaders.from_label_func(
+    path, bs=8, fnames = get_image_files(path/"images"),
+    label_func = lambda o: path/'labels'/f'{o.stem}_P{o.suffix}',
+    codes = np.loadtxt(path/'codes.txt', dtype=str)
+)
+```
 
+`learn = unet_learner(dls, resnet34)`
+
+`learn.fine_tune(8)`
+
+`learn.show_results(max_n=6, figsize=(7, 8))`
 ### URLs datasets:
 
 1.  **ADULT_SAMPLE**: A small of the [adults
