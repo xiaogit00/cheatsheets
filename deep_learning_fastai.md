@@ -11,6 +11,35 @@
 - ⁇ *untar_data(URL)* downloads a tar file and untars it 
 - ⁇ *URLs.PETS* - simply returns this URL *https://s3.amazonaws.com/fast-ai-imageclas/oxford-iiit-pet.tgz*
 
+### Defining a label function
+`def is_cat(x): return x[0].isupper()` - computer vision datasets are typically structured where the label for an image is part of the file name or most commonly the parent folder name. In this case, it's stated in the data set that "All images with 1st letter as captial are cat images; images with small first letter are dog images" - so this just checks whether first letter is caps. 
+
+### Creating an image data loader
+`dls = ImageDataLoaders.from_name_func(path, get_image_files(path), valid_pct=0.2, seed=42, label_func=is_cat, item_tfms=Resize(224))` - different data types need to be loaded differently. In this case, the ImageDataLoader takes the path, gets the image files, creates a validation set with a seed, label function, and a transformer. In this case, we apply Resize function. 
+- ⁇ *item_tfms* - will apply to each item; *batch_tfms* applies to a batch of items at once using GPU, will be particularly fast. 
+- ⁇ *from_name_func* - labels extracted using function applied to filename -> basically reads the file name, applies label function on file name, gets array of labels 
+
+
+### Creating a convolutional neural network (CNN)
+`learn = vision_learner(dls, resnet34, metrics=error_rate)` - takes in data to train on, what architecture (model) to use, and what metric to use  
+- ⁇ *resnet34* - refers to number of layers of this variant, other options are 18, 50, 101, 152
+- ⁇ *metric* - measures quality of model's prediction using validation set after each epoch; other options: accuracy
+- ⁇ *pretrained* - a param that defaults to true, sets weights in model to values that's alrd been trained to recognize a thousand different categories across 1.3m photos, using imageNet dataset
+    - we should 'nearly always use pretained model, cos it means our model is already very capable'  
+    - using pre-trained, vision_learner will remove last layer as it's specifically customized to original task (imageNet dataset classification) and replace it with one or more new layers with randomized weights; last part of model known as the head 
+
+`learn.fine_tune(1)` - 'learn' only describes the architecture of the CNN, it doesn't do anyth until we tell it to fit the data. fine_tune is a variant of fit; if you start with pretrained model, you use fine_tune. param is the number of epochs - or, how many times to look at each image. 
+
+## Text Classification
+`from fastai.text.all import *`
+
+`dls = TextDataLoaders.from_folder(untar_data(URLs.IMDB), valid='test')` - defines a DataLoader, with the validation set from 'test'
+
+`learn = text_classifier_learner(dls, AWD_LSTM, drop_mult=0.5, metrics=accuracy)` - define a text learner, using LSTM archi
+
+`learn.fine_tune(4, 1e-2)` - 4 epochs 
+
+
 
 ### URLs datasets:
 
