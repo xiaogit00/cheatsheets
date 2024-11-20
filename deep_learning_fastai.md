@@ -19,6 +19,18 @@
 - ⁇ *item_tfms* - will apply to each item; *batch_tfms* applies to a batch of items at once using GPU, will be particularly fast. 
 - ⁇ *from_name_func* - labels extracted using function applied to filename -> basically reads the file name, applies label function on file name, gets array of labels 
 
+### Data loaders
+```
+dls = DataBlock(
+    blocks=(ImageBlock, CategoryBlock), # input and output 
+    get_items=get_image_files, # what to train from: returns a list of image files
+    splitter=RandomSplitter(valid_pct=0.2, seed=42),
+    get_y=parent_label,
+    item_tfms=Resize(128)
+)
+```
+- instantiates a DataLoader that sets a couple of parameters - kind of like a pipeline object 
+
 
 ### Creating a convolutional neural network (CNN)
 `learn = vision_learner(dls, resnet34, metrics=error_rate)` - takes in data to train on, what architecture (model) to use, and what metric to use  
@@ -30,10 +42,60 @@
 
 `learn.fine_tune(1)` - 'learn' only describes the architecture of the CNN, it doesn't do anyth until we tell it to fit the data. fine_tune is a variant of fit; if you start with pretrained model, you use fine_tune. param is the number of epochs - or, how many times to look at each image. 
 
+### Confusion Matrix, Top losses, and cleaning
+
+`interp = ClassificationInterpretation.from_learner(learn)` - creates an interpretation object, for confusion matrix
+
+`interp.plot_confusion_matrix()` - plots the confusion matrix 
+
+`interp.plot_top_losses(5, nrows=1)` - plots the top losses 
+
+`cleaner = ImageClassifierCleaner(learn)` - creates a cleaner interface, allows you to clean by top losses
+
+`cleaner` - run cleaner on ipynb
+
+`for idx in cleaner.delete(): cleaner.fns[idx].unlink()` - deletes 
+
+`for idx,cat in cleaner.change(): shutil.move(str(cleaner.fns[idx]), path/cat)` - deletes 
+
+
 ### Uploading an image and predicting
 `img = PILImage.create('bird.jpg')` - pil = python image library. simply creates an image 
 
 `is_cat,_,probs = learn.predict(img)` returns whether is cat and probability
+
+### Exporting & Importing
+`learn.export('export.pkl)` - creates the pickle file 
+
+`learn = load_learner('export.pkl')`
+
+`learn.predict(im)` -> outputs a tuple ('pred, index, probability'); pred=prediction, index is the index of the category, probability is an array of prob of each category
+
+Defining a util function to output predictions:
+```
+categories = ("black", "grizzly", "teddy")
+def classify_image(img):
+    pred, idx, probs = learn.predict(img)
+    print(map(float, probs))
+    return dict(zip(categories, map(float, probs)))
+
+{'black': 1.4010183235768636e-08,
+ 'grizzly': 5.510236178452033e-07,
+ 'teddy': 0.9999994039535522}
+```
+
+### Deploying with Gradio
+`import gradio as gr` 
+
+`image = gr.Image(height=192, width=192)` - creates an image component that can be used to upload or display images
+
+`label = gr.Label()` - displays a classification label
+
+`examples = ['grizzly.jpg', 'teddy.jpg']` 
+
+`intf = gr.Interface(fn=classify_image, inputs=image, outputs=label, examples=examples)` - creates an interface! takes the model you've defined, define inputs and outs, throw in some examples. 
+
+`intf.launch(inline=False)` - launches the interface at local host; to launch public link, set share=True
 
 ## Text Classification
 `from fastai.text.all import *`
