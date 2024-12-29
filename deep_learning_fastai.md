@@ -34,9 +34,9 @@ dls = DataBlock(
 
 ### Creating a convolutional neural network (CNN)
 `learn = vision_learner(dls, resnet34, metrics=error_rate)` - takes in data to train on, what architecture (model) to use, and what metric to use  
-- ⁇ *resnet34* - refers to number of layers of this variant, other options are 18, 50, 101, 152
-- ⁇ *metric* - measures quality of model's prediction using validation set after each epoch; other options: accuracy
-- ⁇ *pretrained* - a param that defaults to true, sets weights in model to values that's alrd been trained to recognize a thousand different categories across 1.3m photos, using imageNet dataset
+- *resnet34* - refers to number of layers of this variant, other options are 18, 50, 101, 152
+- *metric* - measures quality of model's prediction using validation set after each epoch; other options: accuracy
+- *pretrained* - a param that defaults to true, sets weights in model to values that's alrd been trained to recognize a thousand different categories across 1.3m photos, using imageNet dataset
     - we should 'nearly always use pretained model, cos it means our model is already very capable'  
     - using pre-trained, vision_learner will remove last layer as it's specifically customized to original task (imageNet dataset classification) and replace it with one or more new layers with randomized weights; last part of model known as the head 
 
