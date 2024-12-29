@@ -8,16 +8,16 @@
 ## Image Classification
 ### Downloading Images
 **`path = untar_data(URLs.PETS)/'images'`** -> downloads data to */Users/lei/.fastai/data/oxford-iiit-pet/images*, and returns the path object, which is mainly that directory string
-- ⁇ *untar_data(URL)* downloads a tar file and untars it 
-- ⁇ *URLs.PETS* - simply returns this URL *https://s3.amazonaws.com/fast-ai-imageclas/oxford-iiit-pet.tgz*
+- *untar_data(URL)* downloads a tar file and untars it 
+- *URLs.PETS* - simply returns this URL *https://s3.amazonaws.com/fast-ai-imageclas/oxford-iiit-pet.tgz*
 
 ### Defining a label function
 `def is_cat(x): return x[0].isupper()` - computer vision datasets are typically structured where the label for an image is part of the file name or most commonly the parent folder name. In this case, it's stated in the data set that "All images with 1st letter as captial are cat images; images with small first letter are dog images" - so this just checks whether first letter is caps. 
 
 ### Creating an image data loader
 `dls = ImageDataLoaders.from_name_func(path, get_image_files(path), valid_pct=0.2, seed=42, label_func=is_cat, item_tfms=Resize(224))` - different data types need to be loaded differently. In this case, the ImageDataLoader takes the path, gets the image files, creates a validation set with a seed, label function, and a transformer. In this case, we apply Resize function. 
-- ⁇ *item_tfms* - will apply to each item; *batch_tfms* applies to a batch of items at once using GPU, will be particularly fast. 
-- ⁇ *from_name_func* - labels extracted using function applied to filename -> basically reads the file name, applies label function on file name, gets array of labels 
+- *item_tfms* - will apply to each item; *batch_tfms* applies to a batch of items at once using GPU, will be particularly fast. 
+- *from_name_func* - labels extracted using function applied to filename -> basically reads the file name, applies label function on file name, gets array of labels 
 
 ### Data loaders
 ```
@@ -41,6 +41,12 @@ dls = DataBlock(
     - using pre-trained, vision_learner will remove last layer as it's specifically customized to original task (imageNet dataset classification) and replace it with one or more new layers with randomized weights; last part of model known as the head 
 
 `learn.fine_tune(1)` - 'learn' only describes the architecture of the CNN, it doesn't do anyth until we tell it to fit the data. fine_tune is a variant of fit; if you start with pretrained model, you use fine_tune. param is the number of epochs - or, how many times to look at each image. 
+
+`import timm` 
+
+`timm.list_models('convnext')` - list other models that it can use 
+
+`learn = vision_learner(dls, 'convnext_tiny_in22k', metrics=error_rate).to_fp16()` - use convnext_tiny_in22k model
 
 ### Confusion Matrix, Top losses, and cleaning
 
@@ -70,6 +76,8 @@ dls = DataBlock(
 `learn = load_learner('export.pkl')`
 
 `learn.predict(im)` -> outputs a tuple ('pred, index, probability'); pred=prediction, index is the index of the category, probability is an array of prob of each category
+
+`categories = learn.dls.vocab` - the categories it's learned
 
 Defining a util function to output predictions:
 ```
