@@ -83,10 +83,16 @@ You can match something, but then capture groups. Using ( )
 Naming groups:
 `(?P<user>[\w.-]+)@(?P<domain>[\w.-])` - match.group('user')
 
-## Lookarounds:
-(?=): positive lookahead -- A(?=B) finds expression A but only when followed by expression B. E.g. `\w+(?= Simpson)` | `\b(?!2)\d{3}\b` -> 3 digit characters that don't begin with 2. 
+## Backreference \1
+Reference back to the first 
 
-(?!): negative lookahead -- A(?!B) finds expression A but only when not followed by expression B. `\w+(?! Simpson)`
+## Lookarounds:
+(?=): positive lookahead -- A(?=B) finds expression A but only when followed by expression B. E.g. `\w+(?= Simpson)` 
+
+(?!): negative lookahead -- A(?!B) finds expression A but only when not followed by expression B. 
+- `\w+(?! Simpson)` 
+- `\b(?!2)\d{3}\b` -> 3 digit characters that don't begin with 2. 
+- `(?!SBS|SH|SMC|SEP|SPF|STC)[A-Z]{3}\d{4}[A-Z]` -> 3 letters that don't begin with the above
 
 (?<=): positive lookbehind -- (?<=B)A finds expression A but only when preceded by expression B  `(?<=S\$)[0-9,.]*\d` -> 
 

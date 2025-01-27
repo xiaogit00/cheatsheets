@@ -109,6 +109,28 @@ for review in tqdm(reviews): #tqdm just makes progress bars
 show_wordcloud(adjective_frequencies)
 ```
 
+### Stemming
+`from nltk.stem.porter import PorterStemmer`
+`from nltk.stem.snowball import SnowballStemmer`
+`from nltk.stem.lancaster import LancasterStemmer`
+`from nltk.stem import WordNetLemmatizer`
+
+porter_stemmer = PorterStemmer()
+lancaster_stemmer = LancasterStemmer()
+snowball_stemmer = SnowballStemmer('english')
+
+`stemmed_word = porter_stemmer.stem('accepted')` - stems the word to accept
+
+### Lemmatization
+`from nltk.stem import WordNetLemmatizer`
+`wordnet_lemmatizer = WordNetLemmatizer()`
+`lemmatized_word = wordnet_lemmatizer.lemmatize(word, pos='n')` -> pos $$\isin$$ {n, v, a, r}
+`doc = nlp(sentence)`
+```python
+for token in doc:
+    print (token.text, '=[{}]=>'.format(token.pos_), token.lemma_) 
+```
+
 ---
 ### Appendix
 
