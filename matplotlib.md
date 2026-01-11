@@ -126,7 +126,7 @@ And import it into your work like so:
 `plt.style.use('./custom.mplstyle')`
 
 ## Pandas DFs
-df.plot() - normal line plot
+`df.plot(title="Chart title", figsize=(10, 6))` - normal line plot
 
 
 ## Common scripts
