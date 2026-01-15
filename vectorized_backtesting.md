@@ -348,3 +348,132 @@ array([datetime.timedelta(days=2), datetime.timedelta(days=12),
 
 Step 3: Find the longest period:
 `periods.max()` -> datetime.timedelta(days=1563)
+
+### Momentum based strategies
+Importing the usual
+```python
+raw = pd.read_csv('http://hilpisch.com/pyalgo_eikon_eod_data.csv',index_col=0, parse_dates=True).dropna()
+data = pd.DataFrame(raw['XAU='])
+data.rename(columns={'XAU=': 'price'}, inplace=True)
+data['returns'] = np.log(data['price'] / data['price'].shift(1)) # same idea of returns calcs as SMA
+```
+
+`data['position'] = np.sign(data['returns'])` - position is simply the sign of the current day returns (see below)
+
+**The main idea of this strategy is: buy if the last return was positive and to sell it if it was negative.**
+
+`data['strategy'] = data['position'].shift(1) * data['returns']` - think: take previous day sign, multiply by current day returns. Simulates the behavior below:
+- Assuming you're trading at start of day. And the price is EOD prices.
+- IF, say, on 6th Jan, my last returns is -ve, so I sold. However, 6th Jan saw positive returns. Hence, my strategy would yield returns -ve of whatever the 6th Jan returns saw.  
+- Position is shifted meaning you're taking the previous day's sign, and multiplying by current day's returns. That's about it. 
+
+```python
+In [20]: data
+Out[20]: 
+                price   returns  position  strategy
+Date                                               
+2010-01-04  1120.0000       NaN       NaN       NaN
+2010-01-05  1118.6500 -0.001206      -1.0       NaN
+2010-01-06  1138.5000  0.017589       1.0 -0.017589
+2010-01-07  1131.9000 -0.005814      -1.0 -0.005814
+2010-01-08  1136.1000  0.003704       1.0 -0.003704
+...               ...       ...       ...       ...
+2019-12-24  1498.8100  0.009075       1.0  0.009075
+2019-12-26  1511.2979  0.008297       1.0  0.008297
+2019-12-27  1510.4167 -0.000583      -1.0 -0.000583
+2019-12-30  1515.1230  0.003111       1.0 -0.003111
+2019-12-31  1517.0100  0.001245       1.0  0.001245
+```
+
+But this strategy gives shit returns!
+
+![alt text](<screenshots/Screenshot 2026-01-14 at 10.13.57 AM.png>)
+
+#### Using the average of last 3 daily returns instead:
+
+`data['position'] = np.sign(data['returns'].rolling(3).mean())` - this will basically average the last 3 returns (-0.001206+0.017589-0.005814)/3 and if it's positive, give 1 and if negative, give -1. Conceptually, this gives us a longer window to track what 'good'/bullish sentiment is: last 3 days bullish, overall (defined by positive increase)
+
+```
+In [31]: data.head(10)
+Out[31]: 
+              price   returns  position  strategy
+Date                                             
+2010-01-04  1120.00       NaN       NaN       NaN
+2010-01-05  1118.65 -0.001206       NaN       NaN
+2010-01-06  1138.50  0.017589       NaN -0.017589
+2010-01-07  1131.90 -0.005814       1.0 -0.005814
+2010-01-08  1136.10  0.003704       1.0 -0.003704
+2010-01-11  1152.60  0.014419       1.0  0.014419
+```
+
+The performance of this strategy is a lot better:
+
+![alt text](screenshots/3day_momentum.png)
+
+You can see that the performance is v sensitive to the time window param. If you choose 2 days, the performance is much worse:
+
+![alt text](screenshots/2day_momentum.png)
+
+### Code for testing different windows - fore more HFT cases:
+
+```
+to_plot = ['returns']
+for m in [1, 3, 5, 7, 9]:
+	data[f'position_{m}'] = np.sign(data['returns'].rolling(m).mean())
+	data[f'strategy_{m}'] = (data[f'position_{m}'].shift(1) * # Essentially same logic but for diff windows. 
+	      data['returns'])
+	to_plot.append(f'strategy_{m}')
+
+data[to_plot].dropna().cumsum().apply(np.exp).plot(
+      title='AAPL intraday 05. May 2020',
+      figsize=(10, 6), style=['-', '--', '--', '--', '--','--'])
+```
+
+### Mean Reversion Strategies
+Initializing - you have 'price', 'returns', 'SMA', and 'distance' column. 
+```
+data = pd.DataFrame(raw['GDX'])
+data.rename(columns={'GDX': 'price'}, inplace=True)
+data['returns'] = np.log(data['price'] /data['price'].shift(1))
+SMA = 25
+data['SMA'] = data['price'].rolling(SMA).mean()
+threshold = 3.5
+data['distance'] = data['price'] - data['SMA']
+```
+The idea of distance column is the distance between SMA and price. It represents how much the recent price 'deviated' from the mean. You can plot a chart of distance below (along the threshold lines - 3.5 in this case):
+```
+data['distance'].dropna().plot(figsize=(10, 6), legend=True)
+      plt.axhline(threshold, color='r')
+      plt.axhline(-threshold, color='r')
+      plt.axhline(0, color='r')
+```
+![alt text](screenshots/distance.png)
+
+**The general idea here is, if distance crosses upper threshold, you short. If distance crosses lower threshold, you long.**
+
+Now, we derive the position using the below:
+
+
+`data['position'] = np.where(data['distance'] > threshold,-1, np.nan)` - for positive distance above threshold, we short; else, set as NaN
+
+`data['position'] = np.where(data['distance'] < -threshold,1, data['position'])` - for negative distance below threshold, we long; else, set as NaN
+
+`data['position'] = np.where(data['distance'] * data['distance'].shift(1) < 0, 0, data['position'])` - if sign change between 2 distances, we set to 0. The 'business logic' of this is this: given that a positive distance represents price > SMA (more than mean), and negative distance means price < SMA (less than mean), the point in which it crosses 0 is where it's very neutral - it's not a period with significant price movement, it's just about the mean. It represents a point without 'momentum'. At the very beginning of these changes, we set it to 0 - this will be significant in the next command.
+
+`data['position'] = data['position'].ffill().fillna(0)` - here, ffill() will propagate the last valid observation across all the NaNs. 
+
+**At this point, all the parts above and below threshold will have 1 and -1, and all the parts between those threshold lines will be set to 0 due to ffill.**
+
+`data['position'].iloc[SMA:].plot(ylim=[-1.1, 1.1],figsize=(10, 6))` - this below is the output:
+
+![alt text](screenshots/mean_reversion_positions.png)
+
+This chart means that there's only specific periods where we take a short or long position - most times we're neutral. You only ride the waves of mean reversion during some periods. 
+
+**Plotting your returns:**
+
+`data['strategy'] = data['position'].shift(1) * data['returns']`
+
+`data[['returns', 'strategy']].dropna().cumsum().apply(np.exp).plot(figsize=(10, 6))`
+
+![alt text](screenshots/returns_mean_reversion.png)
