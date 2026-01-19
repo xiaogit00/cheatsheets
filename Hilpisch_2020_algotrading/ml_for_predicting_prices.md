@@ -132,3 +132,110 @@ Date
 2010-01-26  1.4073  0.000919  0.003330 -0.000780 -0.013874 -0.005858         1.0 -0.005457
 ```
 
+### Logistic regression for predicting price
+So here's the code for that, it's a very similar approach to linear regression:
+
+```python
+In [97]: from sklearn.metrics import accuracy_score
+In [98]: lm = linear_model.LogisticRegression(C=1e7, solver='lbfgs', multi_class='auto', max_iter=1000)
+
+In [99]: lm.fit(data[cols], np.sign(data['return'])) # here, cols are created in the same way as linear regression
+Out[99]: LogisticRegression(C=10000000.0, max_iter=1000)
+
+In [100]: data['prediction'] = lm.predict(data[cols])
+In [101]: data['prediction'].value_counts()
+Out[101]: 1.0 1983
+-1.0 529
+Name: prediction, dtype: int64
+
+In [102]: hits = np.sign(data['return'].iloc[lags:] *data['prediction'].iloc[lags:]).value_counts()
+
+In [103]: hits
+Out[103]: 1.0 1338
+-1.0 1159
+0.0 12
+dtype: int64
+
+In [104]: accuracy_score(data['prediction'],
+np.sign(data['return']))
+Out[104]: 0.5338375796178344
+
+In [105]: data['strategy'] = data['prediction'] * data['return']
+In [106]: data[['return', 'strategy']].sum().apply(np.exp)
+Out[106]: return 1.289478
+strategy 2.458716
+dtype: float64
+
+In [107]: data[['return', 'strategy']].cumsum().apply(np.exp).plot(
+figsize=(10, 6));
+```
+
+Does it yield good results? It's very hard to tell. Apparently good compared to passive benchmark, but need to test it. 
+
+### Deep learning to predict prices:
+- This is based on Keras
+- Using the price features alone don't seem to produce good results. 
+- However, if you use momentum, volatility, and distance, it seems to produce better results. 
+
+Reproducing the code:
+`data['momentum'] = data['return'].rolling(5).mean().shift(1)`
+
+`data['volatility'] = data['return'].rolling(20).std().shift(1)`
+
+`data['distance'] = (data['price'] - data['price'].rolling(50).mean()).shift(1)`
+
+`data.dropna(inplace=True)`
+
+```
+cols.extend(['momentum', 'volatility', 'distance'])
+
+training_data = data[data.index < cutoff].copy()
+
+mu, std = training_data.mean(), training_data.std()
+
+training_data_ = (training_data - mu) / std
+
+test_data = data[data.index >= cutoff].copy()
+
+test_data_ = (test_data - mu) / std
+
+set_seeds()
+model = Sequential()
+model.add(Dense(32, activation='relu',
+input_shape=(len(cols),)))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
+model.compile(optimizer=optimizer,
+loss='binary_crossentropy',
+metrics=['accuracy'])
+
+model.fit(training_data_[cols], training_data['direction'],
+verbose=False, epochs=25)
+
+model.evaluate(training_data_[cols], training_data['direction'])
+
+pred = np.where(model.predict(training_data_[cols]) > 0.5, 1, 0)
+
+training_data['prediction'] = np.where(pred > 0, 1, -1)
+
+training_data['strategy'] = (training_data['prediction'] * training_data['return'])
+
+training_data[['return', 'strategy']].sum().apply(np.exp)
+
+training_data[['return', 'strategy']].cumsum().apply(np.exp).plot(figsize=(10, 6))
+
+#Eval
+model.evaluate(test_data_[cols], test_data['direction'])
+pred = np.where(model.predict(test_data_[cols]) > 0.5, 1, 0)
+test_data['prediction'] = np.where(pred > 0, 1,
+-1)
+test_data['prediction'].value_counts()
+test_data['strategy'] = (test_data['prediction'] * test_data['return'])
+test_data[['return', 'strategy']].sum().apply(np.exp)
+
+test_data[['return', 'strategy']].cumsum().apply(np.exp).plot(figsize=(10, 6))
+```
+
+The idea is simple again: create a model, train it with training_data, which consists of all those columns as feature: price, lags, momentum, volatility, etc. 
+
+Use the model to make predictions, compare predictions with test data. 
