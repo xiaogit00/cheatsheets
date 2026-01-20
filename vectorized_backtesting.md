@@ -95,7 +95,9 @@ So you can sum your log returns and get the product of all of them by exponentia
 
 Exp(Log(A*B*C)) = A*B*C
 
-So later, we'll sum up all the log returns, and exp them to get the returns figures. 
+First, you get the log returns by `data['returns'].sum()`. Then, you apply `exp` to them to convert them to linear space of retruns:
+
+`data['returns'].apply(np.exp)` - this gives actual returns.
 
 `data['returns'].hist(bins=35, figsize=(10, 6));` - visualizing the returns as a histogram
 
@@ -103,6 +105,8 @@ So later, we'll sum up all the log returns, and exp them to get the returns figu
 
 ### Crucial: Calculating strategy returns
 `data['strategy'] = data['position'].shift(1) * data['returns']` - this gives you strategy returns. 
+
+`data['strategy'].sum().apply(np.exp)` - the strategy returns.
 
 What this does: 
 ![alt text](screenshots/strategy_returns.png)
