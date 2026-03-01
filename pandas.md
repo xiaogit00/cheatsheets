@@ -38,7 +38,24 @@ Writing to different sheets in excel.
 `pd.DataFrame(dict, index = [])`
 `pd.Series([])`
 `pd.Series([], index = [], name='')`
-`df.columns = ['col1', 'col2']` - creates columns after you create a dataframe.  
+`df.columns = ['col1', 'col2']` - creates columns after you create a dataframe   
+Create a dictionary where keys are column names and values are lists
+```python
+# Create a dictionary where keys are column names and values are lists
+data = {
+    'Name': ['John', 'Emma', 'Alex'],
+    'Age': [28, 24, 32],
+    'City': ['New York', 'London', 'Paris']
+}
+
+# Convert the dictionary to a DataFrame using the constructor
+df = pd.DataFrame(data, index=['Cat_1', 'Cat_2', 'Cat_3']) # with custom index
+
+# Print the DataFrame
+print(df)
+
+```
+
 
 
 ### DF attributes

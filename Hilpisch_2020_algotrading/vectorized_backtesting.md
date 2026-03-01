@@ -156,6 +156,7 @@ data['SMA2'] = data['price'].rolling(252).mean()
 data['position'] = np.where(data['SMA1'] > data['SMA2'],1,-1)
 data['returns'] = np.log(data['price'] / data['price'].shift(1))
 data['strategy'] = data['position'].shift(1) * data['returns']
+data[['returns', 'strategy]].sum().apply(np.exp)
 data[['returns', 'strategy']].cumsum().apply(np.exp).plot(figsize=(10, 6))
 ```
 
